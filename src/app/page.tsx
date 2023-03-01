@@ -43,18 +43,9 @@ export default async function Home() {
   
   return (
     <main className={styles.main}>
-      <h1>hello world</h1>
-      <Suspense fallback={`hello world`}>
-        <div>
-          {todaySubmissions?.map((sub, index) => {
-            return (
-              <p key={index} className="">
-               {index + 1}. <span>{sub.title} time complexity O(1) and space complexity O(1)</span>
-              </p>
-            )
-          })}
-        </div>
-      </Suspense>
+      <h1>Hey</h1>
+     
+     
       
     </main>
   )
