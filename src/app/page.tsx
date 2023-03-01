@@ -1,91 +1,61 @@
+
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from './page.module.css'
+import UserName from '@/components/UserName'
+import LeetCode from 'leetcode-query'
+import { subtle } from 'crypto'
+import { Suspense } from 'react'
+
+
 
 const inter = Inter({ subsets: ['latin'] })
+//fetch data
+export default async function Home() {
+  let leetcode = new LeetCode();
+  let user = await leetcode.user("yordi1");
+  let acceptedFilter = user.recentSubmissionList?.filter((item) => item.statusDisplay == "Accepted");
+  let today = (item: any) => {
+    let date = new Date();
+    let subM = new Date(item*1000);
+    if (date.getMonth() != subM.getMonth()) return false;
+    else if (date.getDay() != subM.getDay()) return false;
+    return true;
+  }
+  
+    
+  
 
-export default function Home() {
+ // June 12, 2017
+  var d2 = new Date();
+  let todaySubmissions = acceptedFilter?.filter(item => today(item.timestamp));
+  
+      
+  console.log(todaySubmissions?.length);
+  todaySubmissions?.forEach((sub, index) => {
+    console.log(
+    
+      `<p key={index} className="">
+        ${index + 1} <span>${sub.title} time complexity O(1) and space complexity O(1)</span>
+      </p>`
+    )
+  })
+  
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
+      <h1>hello world</h1>
+      <Suspense fallback={`hello world`}>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          {todaySubmissions?.map((sub, index) => {
+            return (
+              <p key={index} className="">
+               {index + 1}. <span>{sub.title} time complexity O(1) and space complexity O(1)</span>
+              </p>
+            )
+          })}
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </Suspense>
+      
     </main>
   )
 }
