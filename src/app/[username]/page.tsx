@@ -1,13 +1,15 @@
 import LeetCode from "leetcode-query";
 import { Suspense } from "react";
 
-
+export const dynamic = 'force-dynamic';
 const Post = async ({
     params,
 }: {
     params: { username: string };
 }) => {
     let leetcode = new LeetCode();
+    leetcode.cache = new Cache();
+    leetcode.cache.clear();
     let user = await leetcode.user(params.username);
     let acceptedFilter = user.recentSubmissionList?.filter((item) => item.statusDisplay == "Accepted");
     let today = (item: any) => {
